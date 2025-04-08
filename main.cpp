@@ -1,5 +1,15 @@
 #include "Player.h"
 
+void change_player_info(Player& player, string name, int speed, int health, int damage, int armor, bool isAlive)
+{
+	player.name = name;
+	player.speed = speed;
+	player.health = health;
+	player.damage = damage;
+	player.armor = armor;
+	player.isAlive = isAlive;
+}
+
 int main()
 {
 	Player player;
@@ -24,13 +34,13 @@ int main()
 	cin >> answer;
 	player.isAlive = tolower(answer) == 'y';
 
-	cout << "\nInfo about player: " << endl;
-	cout << "\tName: " << player.name << endl;
-	cout << "\tSpeed: " << player.speed << endl;
-	cout << "\tHealth: " << player.health << endl;
-	cout << "\tDamage: " << player.damage << endl;
-	cout << "\tArmor: " << player.armor << endl;
-	cout << "\tAlive: " << (player.isAlive ? "Yes" : "No") << endl;
+	cout << "Before:" << endl;
+	cout << player.show_player_info() << endl;
+
+	change_player_info(player, "Timofey", 3, 100, 10, 50, true);
+
+	cout << "After:" << endl;
+	cout << player.show_player_info() << endl;
 
 	return 0;
 }
