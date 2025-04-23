@@ -5,7 +5,7 @@
 
 using namespace std;
 
-class Player
+class Enemy
 {
 public:
 	int x;
@@ -13,11 +13,13 @@ public:
 	int health = 100;
 	bool isAlive = true;
 
-	Player(int x, int y)
+	Enemy(int x, int y)
 	{
 		this->x = x;
 		this->y = y;
 	}
+
+	Enemy() : Enemy(0, 0) {}
 
 	string toString()
 	{
