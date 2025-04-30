@@ -7,12 +7,13 @@ using namespace std;
 
 class Enemy
 {
-public:
+private:
 	int x;
 	int y;
 	int health = 100;
 	bool isAlive = true;
 
+public:
 	Enemy(int x, int y)
 	{
 		this->x = x;
