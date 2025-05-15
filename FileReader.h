@@ -14,46 +14,11 @@ private:
 	char** map;
 
 public:
-	FileReader(string filePath)
-	{
-		ifstream file;
-		file.open(filePath);
+	~FileReader();
 
-		if (file.is_open())
-		{
-			file >> mapWidth >> mapHeight;
+	void readFile(string filePath);
 
-			map = new char* [mapHeight];
-			for (int i = 0; i < mapHeight; i++)
-			{
-				map[i] = new char[mapWidth];
-			}
-
-			int lineNumber = 1;
-			string line;
-
-			while (getline(file, line))
-			{
-				for (int i = 0; i < mapWidth; i++)
-				{
-					map[lineNumber][i] = line[i];
-				}
-
-				lineNumber++;
-			}
-		}
-		else
-		{
-			mapWidth = 0;
-			mapHeight = 0;
-			map = nullptr;
-		}
-
-		file.close();
-	}
-
-	~FileReader()
-	{
-		
-	}
+	int getMapWidth();
+	int getMapHeight();
+	char** getMap();
 };

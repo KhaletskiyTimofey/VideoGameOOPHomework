@@ -128,13 +128,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Language.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Start.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="FileReader.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Language.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Start.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

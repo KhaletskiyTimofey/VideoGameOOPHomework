@@ -10,28 +10,17 @@ class Enemy
 private:
 	int x;
 	int y;
-	int health = 100;
-	bool isAlive = true;
 
 public:
-	Enemy(int x, int y)
-	{
-		this->x = x;
-		this->y = y;
-	}
-
+	Enemy(int x, int y);
 	Enemy() : Enemy(0, 0) {}
 
-	string toString()
-	{
-		string info = "";
+	bool move();
 
-		info += "X: " + to_string(x);
-		info += ", Y: " + to_string(y);
-		info += ", Health: " + to_string(health);
-		info += ", Alive: ";
-		info += isAlive ? "Yes" : "No";
+	int getX();
+	void setX(int x);
+	int getY();
+	void setY(int y);
 
-		return info;
-	}
+	string toString();
 };
