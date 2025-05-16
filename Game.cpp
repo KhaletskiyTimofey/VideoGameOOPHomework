@@ -50,7 +50,7 @@ void Game::readLevel(int levelId)
 	map = fileReader.getMap();
 
 	findPlayerPosition();
-	enemies.FindEnemiesOnMap(countEnemies(), map, mapWidth, mapHeight);
+	findEnemies();
 }
 
 void Game::findPlayerPosition()
@@ -65,6 +65,28 @@ void Game::findPlayerPosition()
 				player.setY(i);
 
 				return;
+			}
+		}
+	}
+}
+
+void Game::findEnemies()
+{
+	int enemiesCount = countEnemies();
+	int enemyId = 0;
+
+	for (int i = 0; i < mapHeight; i++)
+	{
+		for (int j = 0; j < mapWidth; j++)
+		{
+			if (map[i][j] == '&')
+			{
+				enemyList.Add(Enemy(j, i));
+
+				if (++enemyId >= enemiesCount)
+				{
+					return;
+				}
 			}
 		}
 	}
@@ -124,9 +146,9 @@ void Game::playerMovement(int offsetX, int offsetY)
 
 void Game::moveEnemies()
 {
-	for (int i = 0; i < enemies.GetEnemiesCount(); i++)
+	for (int i = 0; i < enemyList.GetSize(); i++)
 	{
-		if (enemies.GetEnemy(i).move())
+		if (enemyList.GetEnemy(i).move())
 		{
 			player.setIsAlive(false);
 		}

@@ -5,7 +5,7 @@
 #include "Language.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "Enemies.h"
+#include "EnemyList.h"
 #include "FileReader.h"
 
 class Game
@@ -14,7 +14,7 @@ private:
 	Language language;
 	FileReader fileReader;
 	Player player;
-	Enemies enemies;
+	EnemyList enemyList;
 
 	int levelId;
 
@@ -31,6 +31,7 @@ private:
 	void findPlayerPosition();
 	void playerMovement(int offsetX, int offsetY);
 
+	void findEnemies();
 	int countEnemies();
 	void moveEnemies();
 
