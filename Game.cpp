@@ -42,6 +42,17 @@ string Game::charToString(char symbol)
 	return str;
 }
 
+void Game::readLevel(int levelId)
+{
+	fileReader.readFile("Levels\\Level " + to_string(levelId) + ".txt");
+	mapWidth = fileReader.getMapWidth();
+	mapHeight = fileReader.getMapHeight();
+	map = fileReader.getMap();
+
+	findPlayerPosition();
+	enemies.FindEnemiesOnMap(countEnemies(), map, mapWidth, mapHeight);
+}
+
 void Game::findPlayerPosition()
 {
 	for (int i = 0; i < mapHeight; i++)
@@ -75,62 +86,6 @@ int Game::countEnemies()
 	}
 
 	return enemiesCount;
-}
-
-void Game::findEnemyPositions()
-{
-	enemiesCount = countEnemies();
-	enemies = new Enemy[enemiesCount];
-	int enemyId = 0;
-
-	for (int i = 0; i < mapHeight; i++)
-	{
-		for (int j = 0; j < mapWidth; j++)
-		{
-			if (map[i][j] == '&')
-			{
-				enemies[enemyId].setX(j);
-				enemies[enemyId].setY(i);
-
-				if (++enemyId >= enemiesCount)
-				{
-					return;
-				}
-			}
-		}
-	}
-}
-
-void Game::start()
-{
-	fileReader.readFile("Levels\\Level " + to_string(levelId) + ".txt");
-	mapWidth = fileReader.getMapWidth();
-	mapHeight = fileReader.getMapHeight();
-	map = fileReader.getMap();
-
-	findPlayerPosition();
-	findEnemyPositions();
-
-	for (int i = 0; i < mapHeight; i++)
-	{
-		for (int j = 0; j < mapWidth; j++)
-		{
-			if (map[i][j] == '#')
-			{
-				setColor("blue");
-			}
-			else if (map[i][j] == '&')
-			{
-				setColor("red");
-			}
-			else
-			{
-				setColor("yellow");
-			}
-
-			print(charToString(map[i][j]), j * 2, i);
-		}
-	}
 }
 
 void Game::playerMovement(int offsetX, int offsetY)
@@ -169,9 +124,9 @@ void Game::playerMovement(int offsetX, int offsetY)
 
 void Game::moveEnemies()
 {
-	for (int i = 0; i < enemiesCount; i++)
+	for (int i = 0; i < enemies.GetEnemiesCount(); i++)
 	{
-		if (enemies[i].move())
+		if (enemies.GetEnemy(i).move())
 		{
 			player.setIsAlive(false);
 		}
@@ -203,30 +158,54 @@ void Game::checkKeys()
 	playerMovement(playerOffsetX, playerOffsetY);
 }
 
+void Game::start()
+{
+	Start start;
+	Language language(start.ChooseLanguage());
+
+	start.OpenWindowFullscreen();
+	start.HideCursor();
+
+	readLevel(1);
+
+	for (int i = 0; i < mapHeight; i++)
+	{
+		for (int j = 0; j < mapWidth; j++)
+		{
+			if (map[i][j] == '#')
+			{
+				setColor("blue");
+			}
+			else if (map[i][j] == '&')
+			{
+				setColor("red");
+			}
+			else
+			{
+				setColor("yellow");
+			}
+
+			print(charToString(map[i][j]), j * 2, i);
+		}
+	}
+}
+
 void Game::update()
 {
 	checkKeys();
 	moveEnemies();
 }
 
-Game::Game(int levelsCount)
+Game::Game()
 {
-	for (levelId = 1; levelId <= levelsCount; levelId++)
+	start();
+
+	while (GetAsyncKeyState(VK_ESCAPE) == 0)
 	{
-		start();
+		update();
 
-		while (GetAsyncKeyState(VK_ESCAPE) == 0)
-		{
-			update();
-
-			Sleep(75);
-		}
-
-		setColor("white");
+		Sleep(75);
 	}
-}
 
-Game::~Game()
-{
-	delete[] enemies;
+	setColor("white");
 }
