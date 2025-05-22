@@ -18,6 +18,7 @@ public:
 	void Remove(int index);
 
 	Enemy GetEnemy(int index);
+	void SetEnemy(int index, Enemy enemy);
 
 	int GetSize();
 	bool IsEmpty();

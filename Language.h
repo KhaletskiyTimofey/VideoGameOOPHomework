@@ -11,6 +11,9 @@ private:
 
 public:
 	Language();
-	Language(bool isEnglish);
+
+	bool getIsEnglish();
+	void setIsEnglish(bool isEnglish);
+
 	string GetText(string text);
 };

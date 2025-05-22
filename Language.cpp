@@ -5,7 +5,12 @@ Language::Language()
 	isEnglish = true;
 }
 
-Language::Language(bool isEnglish)
+bool Language::getIsEnglish()
+{
+	return isEnglish;
+}
+
+void Language::setIsEnglish(bool isEnglish)
 {
 	this->isEnglish = isEnglish;
 }

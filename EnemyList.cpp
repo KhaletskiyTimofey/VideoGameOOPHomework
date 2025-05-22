@@ -25,7 +25,7 @@ void EnemyList::Add(Enemy enemy)
 	else
 	{
 		array = new Enemy[1];
-		array[0] = Enemy();
+		array[0] = enemy;
 		size = 1;
 	}
 }
@@ -61,6 +61,16 @@ Enemy EnemyList::GetEnemy(int index)
 	}
 
 	return array[index];
+}
+
+void EnemyList::SetEnemy(int index, Enemy enemy)
+{
+	if (index < 0 || index >= size || array == nullptr)
+	{
+		return;
+	}
+
+	array[index] = enemy;
 }
 
 int EnemyList::GetSize()

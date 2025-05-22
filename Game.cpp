@@ -142,16 +142,69 @@ void Game::playerMovement(int offsetX, int offsetY)
 	setColor("yellow");
 
 	print("@", playerX * 2, playerY);
+
+	if (map[playerY][playerX] == '*')
+	{
+		map[playerY][playerX] = ' ';
+		coins++;
+
+		showCoins();
+	}
 }
 
 void Game::moveEnemies()
 {
 	for (int i = 0; i < enemyList.GetSize(); i++)
 	{
-		if (enemyList.GetEnemy(i).move())
+		int moveDirection = enemyList.GetEnemy(i).move(map, player.getX(), player.getY());
+
+		if (moveDirection <= 4)
 		{
+			moveEnemy(i, moveDirection);
+		}
+		else
+		{
+			moveEnemy(i, moveDirection / 5 - 1);
 			player.setIsAlive(false);
 		}
+	}
+}
+
+void Game::moveEnemy(int enemyId, int moveDirection)
+{
+	Enemy enemy = enemyList.GetEnemy(enemyId);
+	int enemyX = enemy.getX();
+	int enemyY = enemy.getY();
+	int lastEnemyX = enemyX;
+	int lastEnemyY = enemyY;
+
+	enemy.setIsStayOnCoin(map[enemyY][enemyX] == '*');
+
+	print(" ", enemyX * 2, enemyY);
+
+	setColor("red");
+
+	switch (moveDirection)
+	{
+	case 0: enemyY--; break;
+	case 1: enemyX++; break;
+	case 2: enemyY++; break;
+	case 3: enemyX--; break;
+	}
+
+	enemy.setX(enemyX);
+	enemy.setY(enemyY);
+	enemy.setLastMoveDirection(moveDirection);
+
+	enemyList.SetEnemy(enemyId, enemy);
+
+	print("&", enemyX * 2, enemyY);
+
+	if (enemy.getIsStayOnCoin())
+	{
+		setColor("purple");
+
+		print("*", lastEnemyX * 2, lastEnemyY);
 	}
 }
 
@@ -180,10 +233,39 @@ void Game::checkKeys()
 	playerMovement(playerOffsetX, playerOffsetY);
 }
 
+void Game::showCoins()
+{
+	for (int i = 7; i <= 10; i++)
+	{
+		print(" ", i, mapHeight + 1);
+	}
+
+	setColor("white");
+
+	int textX = language.getIsEnglish() ? 7 : 8;
+
+	if (coins <= 9)
+	{
+		print(to_string(coins), textX, mapHeight + 1);
+	}
+	else if (coins <= 99)
+	{
+		print(to_string(coins / 10), textX, mapHeight + 1);
+		print(to_string(coins % 10), textX + 1, mapHeight + 1);
+	}
+	else
+	{
+		print(to_string(coins / 100), textX, mapHeight + 1);
+		print(to_string(coins % 100 / 10), textX + 1, mapHeight + 1);
+		print(to_string(coins % 10), textX + 2, mapHeight + 1);
+	}
+}
+
 void Game::start()
 {
 	Start start;
-	Language language(start.ChooseLanguage());
+
+	language.setIsEnglish(start.ChooseLanguage());
 
 	start.OpenWindowFullscreen();
 	start.HideCursor();
@@ -198,6 +280,10 @@ void Game::start()
 			{
 				setColor("blue");
 			}
+			else if (map[i][j] == '*')
+			{
+				setColor("purple");
+			}
 			else if (map[i][j] == '&')
 			{
 				setColor("red");
@@ -210,21 +296,55 @@ void Game::start()
 			print(charToString(map[i][j]), j * 2, i);
 		}
 	}
+
+	setColor("white");
+
+	if (language.getIsEnglish())
+	{
+		print("C", 0, mapHeight + 1);
+		print("o", 1, mapHeight + 1);
+		print("i", 2, mapHeight + 1);
+		print("n", 3, mapHeight + 1);
+		print("s", 4, mapHeight + 1);
+		print(":", 5, mapHeight + 1);
+		print("0", 7, mapHeight + 1);
+	}
+	else
+	{
+		print("Ì", 0, mapHeight + 1);
+		print("î", 1, mapHeight + 1);
+		print("í", 2, mapHeight + 1);
+		print("å", 3, mapHeight + 1);
+		print("ò", 4, mapHeight + 1);
+		print("û", 5, mapHeight + 1);
+		print(":", 6, mapHeight + 1);
+		print("0", 8, mapHeight + 1);
+	}
 }
 
-void Game::update()
+void Game::update(int tick)
 {
 	checkKeys();
-	moveEnemies();
+
+	if (tick % 3 == 0)
+	{
+		moveEnemies();
+	}
 }
 
 Game::Game()
 {
+	coins = 0;
+
+	int tick = 0;
+
 	start();
 
-	while (GetAsyncKeyState(VK_ESCAPE) == 0)
+	while (GetAsyncKeyState(VK_ESCAPE) == 0 && player.getIsAlive())
 	{
-		update();
+		update(tick);
+
+		tick++;
 
 		Sleep(75);
 	}

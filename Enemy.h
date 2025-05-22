@@ -1,26 +1,25 @@
 #pragma once
 
-#include <iostream>
-#include <string>
+#include "Entity.h"
 
-using namespace std;
-
-class Enemy
+class Enemy : public Entity
 {
 private:
-	int x;
-	int y;
+	int lastMoveDirection;
+	bool isStayOnCoin;
+
+	int getRandomNumber(int start, int end);
+	bool isMoveToPlayer(char** map, int playerX, int playerY, int moveDirection);
+	bool isCanMove(char** map, int moveDirection);
 
 public:
 	Enemy(int x, int y);
 	Enemy() : Enemy(0, 0) {}
 
-	bool move();
+	int move(char** map, int playerX, int playerY);
 
-	int getX();
-	void setX(int x);
-	int getY();
-	void setY(int y);
-
-	string toString();
+	int getLastMoveDirection();
+	void setLastMoveDirection(int lastMoveDirection);
+	bool getIsStayOnCoin();
+	void setIsStayOnCoin(bool isStayOnCoin);
 };

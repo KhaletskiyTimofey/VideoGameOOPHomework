@@ -4,39 +4,107 @@ Enemy::Enemy(int x, int y)
 {
 	this->x = x;
 	this->y = y;
+	lastMoveDirection = -100;
+	isStayOnCoin = false;
 }
 
-bool Enemy::move()
+int Enemy::getRandomNumber(int start, int end)
 {
-	return false;
+	return rand() % (end - start + 1) + start;
 }
 
-int Enemy::getX()
+bool Enemy::isMoveToPlayer(char** map, int playerX, int playerY, int moveDirection)
 {
-	return x;
+	bool isWillTouchPlayer = false;
+
+	switch (moveDirection)
+	{
+	case 0: if (playerX == x && playerY == y - 1) isWillTouchPlayer = true; break;
+	case 1: if (playerX == x + 1 && playerY == y) isWillTouchPlayer = true; break;
+	case 2: if (playerX == x && playerY == y + 1) isWillTouchPlayer = true; break;
+	case 3: if (playerX == x - 1 && playerY == y) isWillTouchPlayer = true; break;
+	}
+
+	return isWillTouchPlayer;
 }
 
-void Enemy::setX(int x)
+bool Enemy::isCanMove(char** map, int moveDirection)
 {
-	this->x = x;
+	bool isNoWall = false;
+
+	switch (moveDirection)
+	{
+	case 0: if (map[y - 1][x] != '#') isNoWall = true; break;
+	case 1: if (map[y][x + 1] != '#') isNoWall = true; break;
+	case 2: if (map[y + 1][x] != '#') isNoWall = true; break;
+	case 3: if (map[y][x - 1] != '#') isNoWall = true; break;
+	}
+
+	return isNoWall;
 }
 
-int Enemy::getY()
+int Enemy::move(char** map, int playerX, int playerY)
 {
-	return y;
+	for (int i = 0; i < 4; i++)
+	{
+		if (isMoveToPlayer(map, playerX, playerY, i))
+		{
+			return i * 5 + 5;
+		}
+	}
+
+	int moveDirectionsCount = 0;
+	int* moveDirections = new int[10];
+
+	for (int i = 0; i < 4; i++)
+	{
+		if ((getLastMoveDirection() + 2) % 4 != i && isCanMove(map, i))
+		{
+			if (i != getLastMoveDirection())
+			{
+				moveDirections[moveDirectionsCount] = i;
+				moveDirectionsCount++;
+			}
+			else
+			{
+				for (int j = 0; j < 7; j++)
+				{
+					moveDirections[moveDirectionsCount] = i;
+					moveDirectionsCount++;
+				}
+			}
+		}
+	}
+
+	int moveDirection = -1;
+
+	if (moveDirectionsCount > 0)
+	{
+		int moveDirectionId = getRandomNumber(0, moveDirectionsCount - 1);
+		moveDirection = moveDirections[moveDirectionId];
+	}
+
+	delete[] moveDirections;
+
+	return moveDirection;
 }
 
-void Enemy::setY(int y)
+int Enemy::getLastMoveDirection()
 {
-	this->y = y;
+	return lastMoveDirection;
 }
 
-string Enemy::toString()
+void Enemy::setLastMoveDirection(int lastMoveDirection)
 {
-	string info = "";
+	this->lastMoveDirection = lastMoveDirection;
+}
 
-	info += "X: " + to_string(x);
-	info += ", Y: " + to_string(y);
+bool Enemy::getIsStayOnCoin()
+{
+	return isStayOnCoin;
+}
 
-	return info;
+void Enemy::setIsStayOnCoin(bool isStayOnCoin)
+{
+	this->isStayOnCoin = isStayOnCoin;
 }
