@@ -11,6 +11,7 @@ class FileReader
 private:
 	int mapWidth;
 	int mapHeight;
+	int coinsCount;
 	char** map;
 
 public:
@@ -20,5 +21,6 @@ public:
 
 	int getMapWidth();
 	int getMapHeight();
+	int getCoinsCount();
 	char** getMap();
 };

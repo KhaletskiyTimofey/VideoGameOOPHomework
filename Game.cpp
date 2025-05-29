@@ -47,7 +47,11 @@ void Game::readLevel(int levelId)
 	fileReader.readFile("Levels\\Level " + to_string(levelId) + ".txt");
 	mapWidth = fileReader.getMapWidth();
 	mapHeight = fileReader.getMapHeight();
+	coinsCount = fileReader.getCoinsCount();
 	map = fileReader.getMap();
+
+	enemyList.Clear();
+	coins = 0;
 
 	findPlayerPosition();
 	findEnemies();
@@ -261,17 +265,8 @@ void Game::showCoins()
 	}
 }
 
-void Game::start()
+void Game::drawLevel()
 {
-	Start start;
-
-	language.setIsEnglish(start.ChooseLanguage());
-
-	start.OpenWindowFullscreen();
-	start.HideCursor();
-
-	readLevel(1);
-
 	for (int i = 0; i < mapHeight; i++)
 	{
 		for (int j = 0; j < mapWidth; j++)
@@ -299,27 +294,57 @@ void Game::start()
 
 	setColor("white");
 
-	if (language.getIsEnglish())
-	{
-		print("C", 0, mapHeight + 1);
-		print("o", 1, mapHeight + 1);
-		print("i", 2, mapHeight + 1);
-		print("n", 3, mapHeight + 1);
-		print("s", 4, mapHeight + 1);
-		print(":", 5, mapHeight + 1);
-		print("0", 7, mapHeight + 1);
-	}
-	else
-	{
-		print("Ì", 0, mapHeight + 1);
-		print("î", 1, mapHeight + 1);
-		print("í", 2, mapHeight + 1);
-		print("å", 3, mapHeight + 1);
-		print("ò", 4, mapHeight + 1);
-		print("û", 5, mapHeight + 1);
-		print(":", 6, mapHeight + 1);
-		print("0", 8, mapHeight + 1);
-	}
+	cout << "\n" << language.GetText("Coins") << ": 0";
+}
+
+void Game::start()
+{
+	Start start;
+
+	language.setIsEnglish(start.ChooseLanguage());
+
+	start.OpenWindowFullscreen();
+	start.HideCursor();
+
+	cout << language.GetText("Start text 1") << endl;
+	Sleep(1500);
+	cout << language.GetText("Start text 2") << endl;
+	Sleep(2000);
+	cout << language.GetText("Start text 3") << endl;
+	Sleep(2000);
+	cout << language.GetText("Start text 4") << endl;
+	Sleep(2000);
+
+	setColor("blue");
+	cout << "\n#";
+	setColor("white");
+	cout << language.GetText("Wall") << endl;
+	
+	setColor("yellow");
+	cout << "@";
+	setColor("white");
+	cout << language.GetText("Player") << endl;
+	
+	setColor("red");
+	cout << "&";
+	setColor("white");
+	cout << language.GetText("Enemy") << endl;
+	
+	setColor("purple");
+	cout << "*";
+	setColor("white");
+	cout << language.GetText("Coin") << endl;
+
+	Sleep(5000);
+
+	cout << "\n" << language.GetText("Start text end") << endl;
+
+	while (GetAsyncKeyState(VK_SPACE) == 0);
+
+	system("cls");
+
+	readLevel(1);
+	drawLevel();
 }
 
 void Game::update(int tick)
@@ -330,17 +355,86 @@ void Game::update(int tick)
 	{
 		moveEnemies();
 	}
+
+	if (!player.getIsAlive())
+	{
+		player.setIsAlive(true);
+		
+		Sleep(500);
+
+		system("cls");
+		setColor("red");
+
+		cout << language.GetText("Game over") << endl;
+
+		Sleep(1000);
+
+		setColor("white");
+
+		cout << language.GetText("Restarting") << endl;
+
+		Sleep(500);
+
+		system("cls");
+
+		readLevel(currentLevel);
+		drawLevel();
+	}
+
+	if (coins == coinsCount)
+	{
+		if (currentLevel == levelsCount)
+		{
+			Sleep(500);
+
+			system("cls");
+			setColor("green");
+
+			cout << language.GetText("Win") << endl;
+
+			Sleep(3000);
+
+			isGameOpen = false;
+		}
+		else
+		{
+			currentLevel++;
+
+			Sleep(500);
+
+			system("cls");
+			setColor("green");
+
+			cout << language.GetText("Level completed") << endl;
+
+			Sleep(1000);
+
+			setColor("white");
+
+			cout << language.GetText("Loading") << endl;
+
+			Sleep(1000);
+
+			system("cls");
+
+			readLevel(currentLevel);
+			drawLevel();
+		}
+	}
 }
 
-Game::Game()
+Game::Game(int levelsCount)
 {
-	coins = 0;
+	isGameOpen = true;
+
+	currentLevel = 1;
+	this->levelsCount = levelsCount;
 
 	int tick = 0;
 
 	start();
 
-	while (GetAsyncKeyState(VK_ESCAPE) == 0 && player.getIsAlive())
+	while (GetAsyncKeyState(VK_ESCAPE) == 0 && isGameOpen)
 	{
 		update(tick);
 
@@ -348,6 +442,8 @@ Game::Game()
 
 		Sleep(75);
 	}
+
+	system("cls");
 
 	setColor("white");
 }

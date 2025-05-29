@@ -7,7 +7,7 @@ void FileReader::readFile(string filePath)
 
 	if (file.is_open())
 	{
-		file >> mapWidth >> mapHeight;
+		file >> mapWidth >> mapHeight >> coinsCount;
 
 		map = new char* [mapHeight];
 		for (int i = 0; i < mapHeight; i++)
@@ -59,6 +59,11 @@ int FileReader::getMapWidth()
 int FileReader::getMapHeight()
 {
 	return mapHeight;
+}
+
+int FileReader::getCoinsCount()
+{
+	return coinsCount;
 }
 
 char** FileReader::getMap()

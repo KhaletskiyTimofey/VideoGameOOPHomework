@@ -22,4 +22,5 @@ public:
 
 	int GetSize();
 	bool IsEmpty();
+	void Clear();
 };

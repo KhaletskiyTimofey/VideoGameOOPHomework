@@ -82,3 +82,12 @@ bool EnemyList::IsEmpty()
 {
 	return size == 0;
 }
+
+void EnemyList::Clear()
+{
+	if (array != nullptr)
+	{
+		array = nullptr;
+		size = 0;
+	}
+}

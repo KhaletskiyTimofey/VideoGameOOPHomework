@@ -16,10 +16,14 @@ private:
 	Player player;
 	EnemyList enemyList;
 
-	int levelId;
+	bool isGameOpen;
+
+	int currentLevel;
+	int levelsCount;
 
 	int mapWidth;
 	int mapHeight;
+	int coinsCount;
 	char** map;
 
 	int coins;
@@ -29,6 +33,7 @@ private:
 	string charToString(char symbol);
 
 	void readLevel(int levelId);
+	void drawLevel();
 
 	void findPlayerPosition();
 	void playerMovement(int offsetX, int offsetY);
@@ -45,5 +50,5 @@ private:
 	void update(int tick);
 
 public:
-	Game();
+	Game(int levelsCount);
 };
