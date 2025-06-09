@@ -5,8 +5,6 @@ VisualStudioVersion = 17.13.35913.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VideoGameOOPHomework", "VideoGameOOPHomework.vcxproj", "{FC622858-3297-458A-97A2-46AEC381D83F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Point3DProject", "..\Point3DProject\Point3DProject.vcxproj", "{C90EBA9E-E41B-4C51-B6DB-7DC65936A33B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -23,14 +21,6 @@ Global
 		{FC622858-3297-458A-97A2-46AEC381D83F}.Release|x64.Build.0 = Release|x64
 		{FC622858-3297-458A-97A2-46AEC381D83F}.Release|x86.ActiveCfg = Release|Win32
 		{FC622858-3297-458A-97A2-46AEC381D83F}.Release|x86.Build.0 = Release|Win32
-		{C90EBA9E-E41B-4C51-B6DB-7DC65936A33B}.Debug|x64.ActiveCfg = Debug|x64
-		{C90EBA9E-E41B-4C51-B6DB-7DC65936A33B}.Debug|x64.Build.0 = Debug|x64
-		{C90EBA9E-E41B-4C51-B6DB-7DC65936A33B}.Debug|x86.ActiveCfg = Debug|Win32
-		{C90EBA9E-E41B-4C51-B6DB-7DC65936A33B}.Debug|x86.Build.0 = Debug|Win32
-		{C90EBA9E-E41B-4C51-B6DB-7DC65936A33B}.Release|x64.ActiveCfg = Release|x64
-		{C90EBA9E-E41B-4C51-B6DB-7DC65936A33B}.Release|x64.Build.0 = Release|x64
-		{C90EBA9E-E41B-4C51-B6DB-7DC65936A33B}.Release|x86.ActiveCfg = Release|Win32
-		{C90EBA9E-E41B-4C51-B6DB-7DC65936A33B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
